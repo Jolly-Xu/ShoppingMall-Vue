@@ -12,7 +12,7 @@
         </div>
         
         <!-- 登录 -->
-        <div class="login-btn"><span>登录</span></div>
+        <div class="login-btn"><span>登录a</span></div>
     </div>
 </template>
 
