@@ -84,4 +84,17 @@ const router =  createRouter({
 router.afterEach(()=>{
     window,scrollTo(0,0);
 })
+
+router.beforeEach((to, from, next) => {
+    let a = sessionStorage.getItem("userinfo")
+    console.log(a);
+    if(to.fullPath === "/Order"&&a === null)
+    {
+        router.push("/Login")
+    }
+    if(from.fullPath === "/Login"){
+        router.back(-2);
+    }
+    next()
+  })
 export default router

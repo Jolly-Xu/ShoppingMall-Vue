@@ -72,7 +72,12 @@ export default {
           if (res.data.state === true) {
             Orderid = res.data.data;
             console.log("下单成功");
-          } else {
+          }
+          else if(res.data.state === false && res.data.code ==="403"){
+            router.push("/Login")
+          }
+           else {
+             console.log(res);
             ElMessage.warning({
               message: "下单失败，商品以售完",
               type: "warning",
