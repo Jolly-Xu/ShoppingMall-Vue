@@ -11,7 +11,6 @@ export default {
   name: "App",
   created() {
     if (sessionStorage.getItem("store")) {
-      console.log("刷新加载");
       this.$store.replaceState(
         Object.assign(
           {},
@@ -21,7 +20,6 @@ export default {
       );
     }
     window.addEventListener("beforeunload", () => {
-      console.log("刷新了");
       sessionStorage.setItem("store", JSON.stringify(this.$store.state));
     });
   }

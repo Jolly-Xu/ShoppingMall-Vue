@@ -87,7 +87,6 @@ router.afterEach(()=>{
 
 router.beforeEach((to, from, next) => {
     let a = sessionStorage.getItem("userinfo")
-    console.log(a);
     if(to.fullPath === "/Order"&&a === null)
     {
         router.push("/Login")

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <header class="top">
       <div class="iconfont btn1"></div>
       <div class="search">
@@ -81,16 +81,16 @@
     <div class="floor-the-container">
       <div class="recommend">
         <ul class="recommend-list">
-          <li class="recommend-item">
+          <li class="recommend-item" v-for="item in goodsinfo" :key="item.id">
             <a @click.prevent="todetail"
               ><div>
-                <img src="../assets/img/good01.webp" alt="" />
+                <img :src="item.commoditycoverimg" alt="" />
                 <span class="recommend-item-content"
-                  >intercrew春秋韩版女装棉质圆领字母印花潮ins学生休闲长袖外套卫衣女 ITS1TM32W 白色 85/S</span
+                  >{{item.commodityname}}</span
                 >
                 <p class="similar-product-info">
                   <span class="similar-product-info-price"
-                    >¥ <span>289</span>
+                    >¥ <span>{{item.discountprice}}</span>
                   </span>
                   <span class="similar-product-info-type">新品</span>
                   <a href="" class="similar-product-info-looklink"
@@ -101,77 +101,11 @@
                   class="similar-product-info similar-product-info-floor"
                 ></p></div
             ></a>
-          </li>
-
-          <li class="recommend-item">
-            <a href=""
-              ><div>
-                <img src="../assets/img/seckill02.webp" alt="" />
-                <span class="recommend-item-content"
-                  >波司登新款童装男女儿童羽绒服轻暖系列连帽轻薄新款保暖外套短款T10131007
-                  银月紫6139 100/56</span
-                >
-                <p class="similar-product-info">
-                  <span class="similar-product-info-price"
-                    >¥ <span>289</span>
-                  </span>
-                  <span class="similar-product-info-type">新品</span>
-                  <a href="" class="similar-product-info-looklink"
-                    ><span>看相似</span></a
-                  >
-                </p>
-                <p
-                  class="similar-product-info similar-product-info-floor"
-                ></p></div
-            ></a>
-          </li>
-
-          <li class="recommend-item">
-            <a href=""
-              ><div>
-                <img src="../assets/img/seckill02.webp" alt="" />
-                <span class="recommend-item-content"
-                  >波司登新款童装男女儿童羽绒服轻暖系列连帽轻薄新款保暖外套短款T10131007
-                  银月紫6139 100/56</span
-                >
-                <p class="similar-product-info">
-                  <span class="similar-product-info-price"
-                    >¥ <span>289</span>
-                  </span>
-                  <span class="similar-product-info-type">新品</span>
-                  <a href="" class="similar-product-info-looklink"
-                    ><span>看相似</span></a
-                  >
-                </p>
-                <p
-                  class="similar-product-info similar-product-info-floor"
-                ></p></div
-            ></a>
-          </li>
-
-          <li class="recommend-item">
-            <a href=""
-              ><div>
-                <img src="../assets/img/seckill02.webp" alt="" />
-                <span class="recommend-item-content"
-                  >波司登新款童装男女儿童羽绒服轻暖系列连帽轻薄新款保暖外套短款T10131007
-                  银月紫6139 100/56</span>
-                  <p class="similar-product-info">
-                    <span class="similar-product-info-price">¥ <span>289</span> </span>
-                    <span class="similar-product-info-type">新品</span>
-                    <a href="" class="similar-product-info-looklink"><span>看相似</span></a>
-                    </p>
-                    <p class="similar-product-info similar-product-info-floor"></p>
-              </div></a>
           </li>
         </ul>
       </div>
+
     </div>
-  </div>
-
-  <!-- 占位加载 -->
-  <div class="Placeholder-loading">
-
   </div>
 </template>
 
@@ -179,6 +113,7 @@
 import { reactive, ref } from "@vue/reactivity";
 import { useRouter } from "vue-router";
 import { onMounted } from '@vue/runtime-core';
+import {HomeGoodsInfo} from '../api/goods'
 export default {
   name: "Home",
 
@@ -245,6 +180,8 @@ export default {
       },
     ]);
 
+
+    let start = ref(0)
     // 时间变量
     let hours1 = ref(0)
     let hours2 = ref(0)
@@ -252,6 +189,7 @@ export default {
     let mins2 = ref(0)
     let secs1 = ref(0)
     let secs2 = ref(0)
+    let goodsinfo = reactive([])
 
     const timer = (t) => {
       secs2.value--;
@@ -307,11 +245,20 @@ export default {
     })
 
     
-
+    // 跳转
     let router = useRouter();
     const todetail = (()=>{
         router.push("/ProductDetails");
     })
+
+    // 页面加载
+    onMounted(()=>{
+      HomeGoodsInfo(start.value,10).then(res =>{
+        goodsinfo.push(...res.data.data)
+        console.log(res.data.data);
+      })
+    })
+
 
    return {
       CarouselImg,
@@ -323,8 +270,9 @@ export default {
       secs1,
       hours2,
       mins2,
-      secs2
-    };
+      secs2,
+      goodsinfo    
+      };
   },
 };
 </script>
@@ -343,10 +291,10 @@ export default {
   position: absolute;
   height: 35px;
   background-color: white;
-  margin: 0 12%;
+  margin: 0 13%;
   border-radius: 20px;
   top: 10px;
-  width: 76%;
+  width: 74%;
 }
 
 /* 搜索内容 */
@@ -629,7 +577,6 @@ export default {
 .floor-the-container {
   position: relative;
   width: 100%;
-  height: 500px;
   margin-top: 530px;
 }
 .recommend {
@@ -720,9 +667,12 @@ export default {
   height: 14px;
 }
 
-.Placeholder-loading{
+.recommend-list li:last-child::after{
+  content: "";
   width: 100%;
-  height: 300px;
+  height: 100px;
+  display: block;
+  position:absolute;
 }
 
 /* 轮播图样式 */
